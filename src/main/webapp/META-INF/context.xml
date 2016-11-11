@@ -1,0 +1,10 @@
+<Context>
+    <Resource
+            name="dataSource_framework"
+            type="javax.sql.DataSource"
+            driverClassName="com.mysql.jdbc.Driver"
+            url="jdbc:mysql://127.0.0.1:3306/framework?characterEncoding=UTF-8"
+            username="root"
+            password="root"
+            />
+</Context>

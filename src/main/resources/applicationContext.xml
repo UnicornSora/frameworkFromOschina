@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-4.0.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+           http://www.springframework.org/schema/tx 
+           http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+           http://www.springframework.org/schema/jee     
+           http://www.springframework.org/schema/jee/spring-jee-2.0.xsd ">
+    <!-- annotation -->
+    <context:annotation-config />
+    <context:component-scan base-package="com"  >
+        <context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
+    </context:component-scan>
+
+    <!-- 数据源 -->
+    <!-- tomcat ,weblogic 通用 -->
+    <jee:jndi-lookup id="dataSource" jndi-name="dataSource_framework" resource-ref="true"/>
+    <!-- 仅tomcat能用-->
+    <!--<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+            p:driverClassName="oracle.jdbc.driver.OracleDriver" p:url="jdbc:oracle:thin:@192.168.123.105:1521:orcl"
+            p:username="ssh" p:password="ssh" p:maxActive="200" p:maxIdle="30"
+            p:removeAbandoned="true" p:removeAbandonedTimeout="600"
+            p:logAbandoned="true" p:maxWait="10000" /> -->
+    <!-- 仅weblogic能用-->
+    <!--<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+            <property name="jndiName" value="dataSource_sicaapplyprogquery" />
+        </bean>  -->
+
+    <!-- sessionFactory -->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.jdbc.fetch_size">50</prop>
+                <prop key="hibernate.jdbc.batch_size">50</prop>
+                <prop key="hibernate.bytecode.use_reflection_optimizer">false</prop>
+                <!-- 二级缓存技术 -->
+                <prop key="hibernate.cache.use_second_level_cache">true</prop>
+                <prop key=" hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
+                <!-- 查询缓存 -->
+                <prop key="hibernate.cache.use_query_cache">false</prop>
+            </props>
+        </property>
+        <property name="packagesToScan" value="com.base.po" />
+    </bean>
+
+    <!-- 定义HibernateTemplate模板 -->
+    <bean id="template" class="org.springframework.orm.hibernate4.HibernateTemplate">
+        <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+
+    <!-- 配置事务 -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <aop:aspectj-autoproxy proxy-target-class="true" expose-proxy="true"/>
+
+    <aop:config>
+        <aop:advisor pointcut="execution(* com..*Service*.*(..))"
+                     advice-ref="txAdvice" />
+    </aop:config>
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="save*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="update*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="delete*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="get*" read-only="true" />
+            <tx:method name="query*" read-only="true" />
+            <tx:method name="pageQuery*" read-only="true" />
+            <tx:method name="find*" read-only="true" />
+            <tx:method name="*" propagation="REQUIRED" rollback-for="Exception" />
+        </tx:attributes>
+    </tx:advice>
+</beans>

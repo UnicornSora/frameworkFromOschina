@@ -1,0 +1,31 @@
+.cs-tab-menu {
+    width: 120px;
+}
+
+.head_a {
+    height: 93px;
+    width: 100%;
+    float: left;
+    background-image: url(../images/top_bg.jpg) ;
+    background-size:100% 100%;
+}
+.head_aa {
+    height: 93px;
+    width: 153px;
+    float: left;
+}
+.head_ab {
+    height: 93px;
+    width: 400px;
+    float: right;
+}
+.head_aba {
+    height: 30px;
+    width: 400px;
+    float: left;
+}
+.head_abb {
+    height: 63px;
+    width: 400px;
+    float: left;
+}

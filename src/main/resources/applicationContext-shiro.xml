@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-4.0.xsd ">
+    <!-- 缓存管理 -->
+    <bean id="cacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager" />
+
+    <bean id="shiroRealm" class="com.common.shiro.shiro.ShiroRealm"/>
+
+    <!-- Shiro安全管理器 -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="shiroRealm"></property>
+        <property name="cacheManager" ref="cacheManager"></property>
+    </bean>
+
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"></property>
+        <property name="loginUrl" value="/pages/login.jsp"></property>
+        <property name="unauthorizedUrl" value="/"></property>
+        <!-- 授权配置 -->
+        <property name="filterChainDefinitions">
+            <value>
+                <!--与用户登录有关的权限 start-->
+                /pages/login.jsp = anon
+                /css/** = anon
+                /images/** = anon
+                /js/** = anon
+                /stickyImg* = anon
+                /loginUserController/login.do = anon
+                <!--/roleController/save.do = authc , perms["roleController/save.do"] -->
+                <!--角色模块授权 end-->
+                /** = authc
+            </value>
+        </property>
+    </bean>
+
+</beans>

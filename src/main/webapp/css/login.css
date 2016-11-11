@@ -1,0 +1,68 @@
+.content{
+    width:556px;
+    height:304px;
+    float: left;
+    margin-left:520px;
+    margin-top:200px;
+    background-image: url(../images/kuang.png);
+    background-repeat: no-repeat;
+}
+
+.a{
+	width:210px;
+    height:30px;
+    float: left;
+    margin-left:152px;
+    margin-top:91px;
+}
+
+.b{
+	width:210px;
+    height:30px;
+    float: left;
+    margin-left:152px;
+    margin-top:27px;
+}
+
+.d{
+	width:103px;
+    height:30px;
+    float: left;
+    margin-left:152px;
+    margin-top:23px;
+}
+
+.e{
+	width:100px;
+    height:30px;
+    float: left;
+    margin-left:10px;
+    margin-top:20px;
+}
+
+.c{
+	width:400px;
+    height:33px;
+    float: left;
+    margin-top:15px;
+}
+
+.ca{
+	width:157px;
+    height:33px;
+    float: left;
+    margin-left:40px;
+    background-image: url(../images/login.jpg);
+    cursor: pointer;
+}
+
+
+.cb{
+	width:157px;
+    height:33px;
+    float: left;
+    margin-left:10px;
+    background-image: url(../images/clear.jpg);
+    cursor: pointer;
+}
+
